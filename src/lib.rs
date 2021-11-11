@@ -38,8 +38,8 @@ const MAX_QMARK_INCR: f64 = 0.96;
 
 const NORMALIZATION_ALPHA: f64 = 15.0;
 
-static RAW_LEXICON: &'static str = include_str!("resources/vader_lexicon.txt");
-static RAW_EMOJI_LEXICON: &'static str = include_str!("resources/emoji_utf8_lexicon.txt");
+static RAW_LEXICON: &str = include_str!("resources/vader_lexicon.txt");
+static RAW_EMOJI_LEXICON: &str = include_str!("resources/emoji_utf8_lexicon.txt");
 
 lazy_static! {
 
@@ -124,7 +124,7 @@ lazy_static! {
  * Takes the raw text of the lexicon files and creates HashMaps
  **/
 pub fn parse_raw_lexicon(raw_lexicon: &str) -> HashMap<UniCase<&str>, f64> {
-    let lines = raw_lexicon.trim_end_matches("\n").split("\n");
+    let lines = raw_lexicon.trim_end_matches('\n').split('\n');
     let mut lex_dict = HashMap::new();
     for line in lines {
         if line.is_empty() {
@@ -139,7 +139,7 @@ pub fn parse_raw_lexicon(raw_lexicon: &str) -> HashMap<UniCase<&str>, f64> {
 }
 
 pub fn parse_raw_emoji_lexicon(raw_emoji_lexicon: &str) -> HashMap<&str, &str> {
-    let lines = raw_emoji_lexicon.trim_end_matches("\n").split("\n");
+    let lines = raw_emoji_lexicon.trim_end_matches('\n').split('\n');
     let mut emoji_dict = HashMap::new();
     for line in lines {
         if line.is_empty() {
@@ -287,6 +287,12 @@ pub struct SentimentIntensityAnalyzer<'a> {
     emoji_lexicon: &'a HashMap<&'a str, &'a str>,
 }
 
+impl<'a> Default for SentimentIntensityAnalyzer<'a> {
+     fn default() -> Self {
+         Self::new()
+     }
+}
+
 impl<'a> SentimentIntensityAnalyzer<'a> {
     pub fn new() -> SentimentIntensityAnalyzer<'static>{
         SentimentIntensityAnalyzer {
@@ -305,7 +311,7 @@ impl<'a> SentimentIntensityAnalyzer<'a> {
 
     fn get_total_sentiment(&self, sentiments: Vec<f64>, punct_emph_amplifier: f64) -> HashMap<&str, f64> {
         let (mut neg, mut neu, mut pos, mut compound) = (0f64, 0f64, 0f64, 0f64);
-        if sentiments.len() > 0 {
+        if !sentiments.is_empty() {
             let mut total_sentiment: f64 = sentiments.iter().sum();
             if total_sentiment > 0f64 {
                 total_sentiment += punct_emph_amplifier;
@@ -489,7 +495,7 @@ fn least_check(_valence: f64, tokens: &[UniCase<&str>], i: usize) -> f64 {
 // }
 
 fn special_idioms_check(_valence: f64, tokens: &[UniCase<&str>], i: usize) -> f64 {
-    assert_eq!(i > 2, true);
+    assert!(i > 2, "{}", true);
     let mut valence = _valence;
     let mut end_i = i + 1;
 
