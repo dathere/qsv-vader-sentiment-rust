@@ -1,5 +1,5 @@
-extern crate vader_sentiment;
+extern crate vader_sentiment_analysis;
 
 fn main() {
-    vader_sentiment::demo::run_demo();
+    vader_sentiment_analysis::demo::run_demo();
 }
