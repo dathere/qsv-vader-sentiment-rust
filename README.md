@@ -1,7 +1,9 @@
 # VADER-Sentiment-Analysis
 
-
-
+> NOTE: This fork of https://github.com/ckw017/vader-sentiment-rust is primarily here to remove the println! debugging messages.
+Even though those debug messages were [merged](https://github.com/ckw017/vader-sentiment-rust/commit/42500c80b1aff9e0dd0517f64e7d4d9d12ec182c), the version published on crates.io still has them.  Once https://crates.io/crates/vader_sentiment is
+updated, this version will be removed.
+---
 VADER (Valence Aware Dictionary and sEntiment Reasoner) is a lexicon and rule-based sentiment analysis tool that is *specifically attuned to sentiments expressed in social media*. It is fully open-sourced under the [MIT License](http://choosealicense.com/). **This is a port of the original module**, which was written in Python. If you'd like to make a contribution, please checkout  [the original author's work here](https://github.com/cjhutto/vaderSentiment).
 
 # Use Cases
