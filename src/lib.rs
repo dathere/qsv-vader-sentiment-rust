@@ -158,7 +158,7 @@ struct ParsedText<'a> {
 
 impl<'a> ParsedText<'a> {
     //Tokenizes and extracts useful properties of input text
-    fn from_text(text: &'a str) -> ParsedText {
+    fn from_text(text: &'a str) -> Self {
         let _tokens = ParsedText::tokenize(text);
         let _has_mixed_caps = ParsedText::has_mixed_caps(&_tokens);
         let _punc_amplifier = ParsedText::get_punctuation_emphasis(text);
@@ -235,7 +235,7 @@ fn is_negated(token: &UniCase<&str>) -> bool {
 
 //Normalizes score between -1.0 and 1.0. Alpha value is expected upper limit for a score
 fn normalize_score(score: f64) -> f64 {
-    let norm_score = score / (score * score + NORMALIZATION_ALPHA).sqrt();
+    let norm_score = score / score.mul_add(score, NORMALIZATION_ALPHA).sqrt();
     if norm_score < -1.0 {
         return -1.0;
     } else if norm_score > 1.0 {
