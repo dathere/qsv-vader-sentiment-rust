@@ -1,8 +1,7 @@
 # VADER-Sentiment-Analysis
 
-> NOTE: This fork of https://github.com/ckw017/vader-sentiment-rust is primarily here to remove the println! debugging messages.
-Even though those debug messages were [merged](https://github.com/ckw017/vader-sentiment-rust/commit/42500c80b1aff9e0dd0517f64e7d4d9d12ec182c), the version published on crates.io still has them.  Once https://crates.io/crates/vader_sentiment is
-updated, this version will be removed.
+> NOTE: This fork of https://github.com/ckw017/vader-sentiment-rust. There have been no updates to the original codebase, and many dependencies are out of date.
+This renamed fork is primarily to make it compatible with the `qsv` CLI tool.
 ---
 VADER (Valence Aware Dictionary and sEntiment Reasoner) is a lexicon and rule-based sentiment analysis tool that is *specifically attuned to sentiments expressed in social media*. It is fully open-sourced under the [MIT License](http://choosealicense.com/). **This is a port of the original module**, which was written in Python. If you'd like to make a contribution, please checkout  [the original author's work here](https://github.com/cjhutto/vaderSentiment).
 
@@ -29,10 +28,10 @@ VADER (Valence Aware Dictionary and sEntiment Reasoner) is a lexicon and rule-ba
 
 ### Code
 ```rust
-  extern crate vader_sentiment;
+  use qsv_vader_sentiment_analysis;
 
   fn main() {
-      let analyzer = vader_sentiment::SentimentIntensityAnalyzer::new();
+      let analyzer = qsv_vader_sentiment_analysis::SentimentIntensityAnalyzer::new();
       println!("{:#?}", analyzer.polarity_scores("VADER is smart, handsome, and funny."));
       println!("{:#?}", analyzer.polarity_scores("VADER is VERY SMART, handsome, and FUNNY."));
   }
@@ -69,9 +68,9 @@ cjhutto [at] gatech [dot] edu
 You can run a full demo including cases with sarcasm, negation, idioms, and punctuation with this code.
 
 ```rust
-extern crate vader_sentiment;
+use qsv_vader_sentiment_analysis;
 
 fn main() {
-    vader_sentiment::demo::run_demo();
+    qsv_vader_sentiment_analysis::demo::run_demo();
 }
 ```

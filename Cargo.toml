@@ -1,11 +1,11 @@
 [package]
-name = "vader_sentiment_analysis"
-version = "0.1.1"
-authors = ["Chris <chriswong21@berkeley.edu>", "Mariana Meireles <mariana@psychonautgirl.space>"]
+name = "qsv_vader_sentiment_analysis"
+version = "0.2.0"
+authors = ["Chris <chriswong21@berkeley.edu>", "Mariana Meireles <mariana@psychonautgirl.space>", "Joel <joel@dathere.com>"]
 license = "MIT"
-description = "Bindings for Rust from the original Python VaderSentiment analysis tool."
-repository = "https://github.com/jqnatividad/vader-sentiment-rust"
-documentation = "https://docs.rs/vader_sentiment"
+description = "Bindings for Rust from the original Python VaderSentiment analysis tool. Forked for use with qsv."
+repository = "https://github.com/dathere/qsv-vader-sentiment-rust"
+documentation = "https://docs.rs/qsv_vader_sentiment"
 edition = "2021"
 
 [dependencies]
