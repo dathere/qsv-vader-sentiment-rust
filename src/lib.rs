@@ -264,17 +264,15 @@ fn scalar_inc_dec(token: &UniCase<&str>, valence: f64, has_mixed_caps: bool) -> 
 }
 
 fn sum_sentiment_scores(scores: Vec<f64>) -> (f64, f64, u32) {
-    let (mut pos_sum, mut neg_sum, mut neu_count) = (0f64, 0f64, 0);
-    for score in scores {
+    scores.into_iter().fold((0f64, 0f64, 0), |(pos, neg, neu), score| {
         if score > 0f64 {
-            pos_sum += score + 1.0;
+            (pos + score + 1.0, neg, neu)
         } else if score < 0f64 {
-            neg_sum += score - 1.0;
+            (pos, neg + score - 1.0, neu)
         } else {
-            neu_count += 1;
+            (pos, neg, neu + 1)
         }
-    }
-    (pos_sum, neg_sum, neu_count)
+    })
 }
 
 pub struct SentimentIntensityAnalyzer<'a> {
