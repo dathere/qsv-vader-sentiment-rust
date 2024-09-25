@@ -173,7 +173,7 @@ impl<'a> ParsedText<'a> {
         let tokens = text
             .split_whitespace()
             .filter(|s| s.len() > 1)
-            .map(|s| ParsedText::strip_punc_if_word(s))
+            .map(ParsedText::strip_punc_if_word)
             .map(UniCase::new)
             .collect();
         tokens
@@ -453,17 +453,14 @@ fn negation_check(valence: f64, tokens: &[UniCase<&str>], start_i: usize, i: usi
 // If "but" is in the tokens, scales down the sentiment of words before "but" and
 // adds more emphasis to the words after
 fn but_check(tokens: &[UniCase<&str>], sentiments: &mut Vec<f64>) {
-    match tokens.iter().position(|&s| s == *STATIC_BUT) {
-        Some(but_index) => {
-            for i in 0..sentiments.len() {
-                if i < but_index {
-                    sentiments[i] *= 0.5;
-                } else if i > but_index {
-                    sentiments[i] *= 1.5;
-                }
+    if let Some(but_index) = tokens.iter().position(|&s| s == *STATIC_BUT) {
+        for i in 0..sentiments.len() {
+            if i < but_index {
+                sentiments[i] *= 0.5;
+            } else if i > but_index {
+                sentiments[i] *= 1.5;
             }
         }
-        None => return,
     }
 }
 
