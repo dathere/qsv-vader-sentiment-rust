@@ -5,7 +5,7 @@
  * Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.
  **/
 use lazy_static::lazy_static;
-use maplit::{convert_args, hashmap, hashset};
+use lit2::{convert_args, hashmap, hashset};
 use regex::Regex;
 use std::cmp::min;
 use std::collections::{HashMap, HashSet};

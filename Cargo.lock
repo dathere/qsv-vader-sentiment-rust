@@ -18,10 +18,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
-name = "maplit"
-version = "1.0.2"
+name = "lit2"
+version = "1.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3e2e65a1a2e43cfcb47a895c4c8b10d1f4a61097f9f254f183aee60cad9c651d"
+checksum = "dcd0c289759ba04eac993bb32289580c7b37955957f8928cab7b29d54cdf89de"
 
 [[package]]
 name = "memchr"
@@ -34,7 +34,7 @@ name = "qsv_vader_sentiment_analysis"
 version = "0.2.0"
 dependencies = [
  "lazy_static",
- "maplit",
+ "lit2",
  "regex",
  "unicase",
 ]

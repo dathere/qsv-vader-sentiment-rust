@@ -10,6 +10,6 @@ edition = "2021"
 
 [dependencies]
 regex = "1"
-maplit = "1.0.2"
+lit2 = "1"
 lazy_static = "1.5"
 unicase = "2.7"
