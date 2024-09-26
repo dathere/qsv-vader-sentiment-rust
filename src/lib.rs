@@ -119,18 +119,15 @@ lazy_static! {
  **/
 #[must_use]
 pub fn parse_raw_lexicon(raw_lexicon: &str) -> HashMap<UniCase<&str>, f64> {
-    let lines = raw_lexicon.trim_end_matches('\n').split('\n');
-    let mut lex_dict = HashMap::new();
-    for line in lines {
-        if line.is_empty() {
-            continue;
-        }
-        let mut split_line = line.split('\t');
-        let word = split_line.next().unwrap();
-        let val = split_line.next().unwrap();
-        lex_dict.insert(UniCase::new(word), val.parse().unwrap());
-    }
-    lex_dict
+    raw_lexicon
+        .lines()
+        .filter_map(|line| {
+            let mut split_line = line.split('\t');
+            let word = split_line.next()?;
+            let val = split_line.next()?.parse().ok()?;
+            Some((UniCase::new(word), val))
+        })
+        .collect()
 }
 
 #[must_use]
@@ -185,10 +182,11 @@ impl<'a> ParsedText<'a> {
     // Keeps most emoticons, ie ":^)" -> ":^)"\
     fn strip_punc_if_word(token: &str) -> &str {
         let stripped = token.trim_matches(|c| PUNCTUATION.contains(c));
-        if stripped.len() <= 1 {
-            return token;
+        if stripped.len() > 1 {
+            stripped
+        } else {
+            token
         }
-        stripped
     }
 
     // Determines if message has a mix of both all caps and non all caps words
@@ -316,32 +314,22 @@ impl<'a> SentimentIntensityAnalyzer<'a> {
     ) -> HashMap<&str, f64> {
         let (mut neg, mut neu, mut pos, mut compound) = (0f64, 0f64, 0f64, 0f64);
         if !sentiments.is_empty() {
-            let mut total_sentiment: f64 = sentiments.iter().sum();
-            if total_sentiment > 0f64 {
-                total_sentiment += punct_emph_amplifier;
-            } else {
-                total_sentiment -= punct_emph_amplifier;
-            }
+            let total_sentiment: f64 = sentiments.iter().sum::<f64>() + punct_emph_amplifier;
             compound = normalize_score(total_sentiment);
 
-            let (mut pos_sum, mut neg_sum, neu_count) = sum_sentiment_scores(sentiments);
-
-            if pos_sum > neg_sum.abs() {
-                pos_sum += punct_emph_amplifier;
-            } else if pos_sum < neg_sum.abs() {
-                neg_sum -= punct_emph_amplifier;
-            }
+            let (pos_sum, neg_sum, neu_count) = sum_sentiment_scores(sentiments);
 
             let total = pos_sum + neg_sum.abs() + f64::from(neu_count);
             pos = (pos_sum / total).abs();
             neg = (neg_sum / total).abs();
             neu = (f64::from(neu_count) / total).abs();
         }
-        let sentiment_dict = hashmap!["neg" => neg,
-                                      "neu" => neu,
-                                      "pos" => pos,
-                                      "compound" => compound];
-        sentiment_dict
+        hashmap![
+            "neg" => neg,
+            "neu" => neu,
+            "pos" => pos,
+            "compound" => compound
+        ]
     }
 
     #[must_use]
