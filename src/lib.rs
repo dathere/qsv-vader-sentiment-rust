@@ -314,10 +314,21 @@ impl<'a> SentimentIntensityAnalyzer<'a> {
     ) -> HashMap<&str, f64> {
         let (mut neg, mut neu, mut pos, mut compound) = (0f64, 0f64, 0f64, 0f64);
         if !sentiments.is_empty() {
-            let total_sentiment: f64 = sentiments.iter().sum::<f64>() + punct_emph_amplifier;
+            let mut total_sentiment: f64 = sentiments.iter().sum();
+            if total_sentiment > 0f64 {
+                total_sentiment += punct_emph_amplifier;
+            } else {
+                total_sentiment -= punct_emph_amplifier;
+            }
             compound = normalize_score(total_sentiment);
 
-            let (pos_sum, neg_sum, neu_count) = sum_sentiment_scores(sentiments);
+            let (mut pos_sum, mut neg_sum, neu_count) = sum_sentiment_scores(sentiments);
+
+            if pos_sum > neg_sum.abs() {
+                pos_sum += punct_emph_amplifier;
+            } else if pos_sum < neg_sum.abs() {
+                neg_sum -= punct_emph_amplifier;
+            }
 
             let total = pos_sum + neg_sum.abs() + f64::from(neu_count);
             pos = (pos_sum / total).abs();
