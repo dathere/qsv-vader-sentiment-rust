@@ -117,7 +117,8 @@ lazy_static! {
 /**
  * Takes the raw text of the lexicon files and creates `HashMaps`
  **/
-#[must_use] pub fn parse_raw_lexicon(raw_lexicon: &str) -> HashMap<UniCase<&str>, f64> {
+#[must_use]
+pub fn parse_raw_lexicon(raw_lexicon: &str) -> HashMap<UniCase<&str>, f64> {
     let lines = raw_lexicon.trim_end_matches('\n').split('\n');
     let mut lex_dict = HashMap::new();
     for line in lines {
@@ -132,7 +133,8 @@ lazy_static! {
     lex_dict
 }
 
-#[must_use] pub fn parse_raw_emoji_lexicon(raw_emoji_lexicon: &str) -> HashMap<&str, &str> {
+#[must_use]
+pub fn parse_raw_emoji_lexicon(raw_emoji_lexicon: &str) -> HashMap<&str, &str> {
     let lines = raw_emoji_lexicon.trim_end_matches('\n').split('\n');
     let mut emoji_dict = HashMap::new();
     for line in lines {
@@ -264,15 +266,17 @@ fn scalar_inc_dec(token: &UniCase<&str>, valence: f64, has_mixed_caps: bool) -> 
 }
 
 fn sum_sentiment_scores(scores: Vec<f64>) -> (f64, f64, u32) {
-    scores.into_iter().fold((0f64, 0f64, 0), |(pos, neg, neu), score| {
-        if score > 0f64 {
-            (pos + score + 1.0, neg, neu)
-        } else if score < 0f64 {
-            (pos, neg + score - 1.0, neu)
-        } else {
-            (pos, neg, neu + 1)
-        }
-    })
+    scores
+        .into_iter()
+        .fold((0f64, 0f64, 0), |(pos, neg, neu), score| {
+            if score > 0f64 {
+                (pos + score + 1.0, neg, neu)
+            } else if score < 0f64 {
+                (pos, neg + score - 1.0, neu)
+            } else {
+                (pos, neg, neu + 1)
+            }
+        })
 }
 
 pub struct SentimentIntensityAnalyzer<'a> {
@@ -287,14 +291,16 @@ impl<'a> Default for SentimentIntensityAnalyzer<'a> {
 }
 
 impl<'a> SentimentIntensityAnalyzer<'a> {
-    #[must_use] pub fn new() -> SentimentIntensityAnalyzer<'static> {
+    #[must_use]
+    pub fn new() -> SentimentIntensityAnalyzer<'static> {
         SentimentIntensityAnalyzer {
             lexicon: &LEXICON,
             emoji_lexicon: &EMOJI_LEXICON,
         }
     }
 
-    #[must_use] pub fn from_lexicon<'b>(
+    #[must_use]
+    pub fn from_lexicon<'b>(
         _lexicon: &'b HashMap<UniCase<&str>, f64>,
     ) -> SentimentIntensityAnalyzer<'b> {
         SentimentIntensityAnalyzer {
@@ -338,7 +344,8 @@ impl<'a> SentimentIntensityAnalyzer<'a> {
         sentiment_dict
     }
 
-    #[must_use] pub fn polarity_scores(&self, text: &str) -> HashMap<&str, f64> {
+    #[must_use]
+    pub fn polarity_scores(&self, text: &str) -> HashMap<&str, f64> {
         let text = self.append_emoji_descriptions(text);
         let parsedtext = ParsedText::from_text(&text);
         let mut sentiments = Vec::new();
